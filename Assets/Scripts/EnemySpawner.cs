@@ -17,6 +17,12 @@ public class EnemySpawner : MonoBehaviour
 
     }
 
+    
+    void Update()
+    {
+        
+    }
+
     // IEnumerator SpawnWaves()
     // {
     //     int maxWaves = GetMaxWaveNum();
@@ -35,10 +41,6 @@ public class EnemySpawner : MonoBehaviour
     // }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public WaveConfigSO GetCurrentWave(){
         return currentWave;
