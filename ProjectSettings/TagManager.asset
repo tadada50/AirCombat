@@ -14,9 +14,9 @@ TagManager:
   - Background
   - Player
   - Enemy
-  - 
-  - 
-  - 
+  - Enemy_Weapons_Normal
+  - Player_Weapons_Normal
+  - Explosion
   - 
   - 
   - 
@@ -44,11 +44,20 @@ TagManager:
   - name: Background
     uniqueID: 2091419607
     locked: 0
+  - name: Enemy_Weapons_Normal
+    uniqueID: 3858910157
+    locked: 0
+  - name: Player_Weapons_Normal
+    uniqueID: 1104675555
+    locked: 0
   - name: Enemy
     uniqueID: 1331298499
     locked: 0
   - name: Player
     uniqueID: 3730841285
+    locked: 0
+  - name: Explosion
+    uniqueID: 2393003685
     locked: 0
   m_RenderingLayers:
   - Default
