@@ -14,46 +14,12 @@ public class Health : MonoBehaviour
     [SerializeField] SpriteRenderer spriteRenderer;
     float blinkInterval = 0.01f;
     bool isBlinking = false;
+    AudioPlayer audioPlayer;
 
-    void BlinkSprite()
-    {
-        if (criticalHealth > (float)health/(float)initialHealth && !isBlinking)
-        {
-            isBlinking = true;
-            InvokeRepeating("ToggleColor", 0f, blinkInterval);
-        }
-        else if (health >= 900 && isBlinking)
-        {
-            isBlinking = false;
-            CancelInvoke("ToggleColor");
-            if (spriteRenderer != null)
-                spriteRenderer.color = Color.white; // Reset to default color
-        }
-    }
 
-    float colorLerpTime = 0f;
-    void ToggleColor()
+    void Awake()
     {
-        float frac; 
-        if (spriteRenderer != null)
-        {
-            frac = (Math.Abs(Mathf.Sin(Time.time + colorLerpTime)));
-            // frac = (Mathf.Sin(Time.time + colorLerpTime) * 1f);
-            colorLerpTime = (colorLerpTime + Time.deltaTime) % 1f;
-            // frac = Mathf.PingPong(colorLerpTime * 2f, 1f);
-            // Color lerpedColor = Color.Lerp(Color.white, Color.red, frac);
-            // Color lerpedColor = Color.Lerp(Color.red, Color.white, frac);
-            Color lerpedColor = Color.Lerp(Color.white, Color.red, Mathf.PingPong(colorLerpTime * 2f, 1f));
-            // Color lerpedColor = Color.Lerp(Color.white, Color.red, frac);
-            spriteRenderer.color = lerpedColor;
-            //  Debug.Log($"LerpedColor: {lerpedColor}, Fraction: {frac}");
-        }
-    }
-
-    void ToggleSprite()
-    {
-        if (spriteRenderer != null)
-            spriteRenderer.enabled = !spriteRenderer.enabled;
+        audioPlayer = FindFirstObjectByType<AudioPlayer>();
     }
     void Start()
     {
@@ -97,6 +63,7 @@ public class Health : MonoBehaviour
     }
 
     void TakeDamage(int damage){
+        audioPlayer.PlayDamageClip();
             health -= damage;
             if(health<=0){
                 Destroy(gameObject);
@@ -109,5 +76,46 @@ public class Health : MonoBehaviour
             ParticleSystem instance = Instantiate(hitEffect,transform.position,Quaternion.identity,transform);
             Destroy(instance.gameObject, instance.main.duration + instance.main.startLifetime.constantMax);
         }
+    }
+
+        void BlinkSprite()
+    {
+        if (criticalHealth > (float)health/(float)initialHealth && !isBlinking)
+        {
+            isBlinking = true;
+            InvokeRepeating("ToggleColor", 0f, blinkInterval);
+        }
+        else if (health >= 900 && isBlinking)
+        {
+            isBlinking = false;
+            CancelInvoke("ToggleColor");
+            if (spriteRenderer != null)
+                spriteRenderer.color = Color.white; // Reset to default color
+        }
+    }
+
+    float colorLerpTime = 0f;
+    void ToggleColor()
+    {
+        float frac; 
+        if (spriteRenderer != null)
+        {
+            frac = (Math.Abs(Mathf.Sin(Time.time + colorLerpTime)));
+            // frac = (Mathf.Sin(Time.time + colorLerpTime) * 1f);
+            colorLerpTime = (colorLerpTime + Time.deltaTime) % 1f;
+            // frac = Mathf.PingPong(colorLerpTime * 2f, 1f);
+            // Color lerpedColor = Color.Lerp(Color.white, Color.red, frac);
+            // Color lerpedColor = Color.Lerp(Color.red, Color.white, frac);
+            Color lerpedColor = Color.Lerp(Color.white, Color.red, Mathf.PingPong(colorLerpTime * 2f, 1f));
+            // Color lerpedColor = Color.Lerp(Color.white, Color.red, frac);
+            spriteRenderer.color = lerpedColor;
+            //  Debug.Log($"LerpedColor: {lerpedColor}, Fraction: {frac}");
+        }
+    }
+
+    void ToggleSprite()
+    {
+        if (spriteRenderer != null)
+            spriteRenderer.enabled = !spriteRenderer.enabled;
     }
 }

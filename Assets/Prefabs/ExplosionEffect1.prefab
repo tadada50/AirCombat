@@ -1316,12 +1316,12 @@ ParticleSystem:
         key5: {r: 0.74244535, g: 1, b: 0.97007644, a: 0}
         key6: {r: 1, g: 0.13679248, b: 0.13679248, a: 0}
         key7: {r: 1, g: 1, b: 1, a: 0}
-        ctime0: 7132
-        ctime1: 14264
-        ctime2: 26792
-        ctime3: 39707
+        ctime0: 5204
+        ctime1: 12914
+        ctime2: 25058
+        ctime3: 34502
         ctime4: 44140
-        ctime5: 56283
+        ctime5: 65535
         ctime6: 65535
         ctime7: 65535
         atime0: 19275
@@ -1334,7 +1334,7 @@ ParticleSystem:
         atime7: 0
         m_Mode: 0
         m_ColorSpace: 0
-        m_NumColorKeys: 7
+        m_NumColorKeys: 6
         m_NumAlphaKeys: 2
       minGradient:
         serializedVersion: 2

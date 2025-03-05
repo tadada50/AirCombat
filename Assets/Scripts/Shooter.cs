@@ -12,10 +12,16 @@ public class Shooter : MonoBehaviour
     [SerializeField] bool useAI;
     [SerializeField] float enemyFireVariance = 0.5f;
     [SerializeField] float minFiringRate = 0.1f;
-    Coroutine firingCoroutine;
+
     [HideInInspector] public bool isFiring = true;
-        
-    
+
+    Coroutine firingCoroutine;
+    AudioPlayer audioPlayer;
+
+    void Awake()
+    {
+        audioPlayer = FindFirstObjectByType<AudioPlayer>();
+    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -55,6 +61,8 @@ public class Shooter : MonoBehaviour
                 float timeToNextProjectile = Random.Range(baseFiringRate - enemyFireVariance,baseFiringRate+enemyFireVariance);
                 timeToNextProjectile = Mathf.Clamp(timeToNextProjectile, minFiringRate, float.MaxValue);
                 baseFiringRate = timeToNextProjectile;
+            }else{
+                audioPlayer.PlayShootingClip();
             }
             yield return new WaitForSeconds(baseFiringRate);
             
