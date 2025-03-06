@@ -50,8 +50,9 @@ public class Player : MonoBehaviour
     }
 
     void OnAttack(InputValue value){
-        if(shooter != null){
-            shooter.isFiring = value.isPressed;
-        }
+        //do nothing for now, default is to have player firing all the time
+        // if(shooter != null){
+        //     shooter.isFiring = value.isPressed;
+        // }
     }
 }

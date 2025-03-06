@@ -27,6 +27,8 @@ public class Shooter : MonoBehaviour
     {
         if(useAI){
             isFiring = true;
+        }else{
+            isFiring = true; // have the player firing all the time
         }
     }
 

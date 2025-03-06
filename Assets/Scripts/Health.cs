@@ -4,6 +4,7 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     [SerializeField] int health = 50;
+    [SerializeField] int score = 50;
     [SerializeField] ParticleSystem hitEffect;
     [SerializeField] bool isPlayer;
 
@@ -15,15 +16,37 @@ public class Health : MonoBehaviour
     float blinkInterval = 0.01f;
     bool isBlinking = false;
     AudioPlayer audioPlayer;
+    ScoreKeeper scoreKeeper;
+    Player player;
+
+
+
+public int CurrentHealth
+{
+    get {return health;}
+    set {
+        if (health == value) return;
+        health = value;
+        if (OnHealthChange != null)
+            OnHealthChange(health);
+    }
+}
+public delegate void OnHealthChangeDelegate(int newVal);
+public event OnHealthChangeDelegate OnHealthChange;
+
+
 
 
     void Awake()
     {
         audioPlayer = FindFirstObjectByType<AudioPlayer>();
+        initialHealth= CurrentHealth;
+        scoreKeeper = FindFirstObjectByType<ScoreKeeper>();
+        player = FindFirstObjectByType<Player>();
     }
     void Start()
     {
-        initialHealth= health;
+        
         cameraShake = Camera.main.GetComponent<CameraShake>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         // GetComponent<SpriteRenderer>();
@@ -35,6 +58,12 @@ public class Health : MonoBehaviour
            BlinkSprite();
         }
         
+    }
+    public int GetHealth(){
+        return CurrentHealth;        
+    }
+    public int GetInitialHealth(){
+        return initialHealth;
     }
     void OnTriggerEnter2D(Collider2D other)
     {
@@ -64,12 +93,18 @@ public class Health : MonoBehaviour
 
     void TakeDamage(int damage){
         audioPlayer.PlayDamageClip();
-            health -= damage;
-            if(health<=0){
-                Destroy(gameObject);
+            CurrentHealth -= damage;
+            if(CurrentHealth<=0){
+                Die();
             }
     }
 
+    void Die(){
+        if(!isPlayer){
+            scoreKeeper.IncreaseScore(score);
+        }
+        Destroy(gameObject);
+    }
 
     void PlayHitEffect(){
         if(hitEffect != null){
@@ -80,12 +115,12 @@ public class Health : MonoBehaviour
 
         void BlinkSprite()
     {
-        if (criticalHealth > (float)health/(float)initialHealth && !isBlinking)
+        if (criticalHealth > (float)CurrentHealth/(float)initialHealth && !isBlinking)
         {
             isBlinking = true;
             InvokeRepeating("ToggleColor", 0f, blinkInterval);
         }
-        else if (health >= 900 && isBlinking)
+        else if (CurrentHealth >= 900 && isBlinking)
         {
             isBlinking = false;
             CancelInvoke("ToggleColor");
@@ -97,19 +132,11 @@ public class Health : MonoBehaviour
     float colorLerpTime = 0f;
     void ToggleColor()
     {
-        float frac; 
         if (spriteRenderer != null)
         {
-            frac = (Math.Abs(Mathf.Sin(Time.time + colorLerpTime)));
-            // frac = (Mathf.Sin(Time.time + colorLerpTime) * 1f);
             colorLerpTime = (colorLerpTime + Time.deltaTime) % 1f;
-            // frac = Mathf.PingPong(colorLerpTime * 2f, 1f);
-            // Color lerpedColor = Color.Lerp(Color.white, Color.red, frac);
-            // Color lerpedColor = Color.Lerp(Color.red, Color.white, frac);
             Color lerpedColor = Color.Lerp(Color.white, Color.red, Mathf.PingPong(colorLerpTime * 2f, 1f));
-            // Color lerpedColor = Color.Lerp(Color.white, Color.red, frac);
             spriteRenderer.color = lerpedColor;
-            //  Debug.Log($"LerpedColor: {lerpedColor}, Fraction: {frac}");
         }
     }
 
