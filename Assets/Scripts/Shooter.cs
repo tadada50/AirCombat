@@ -38,6 +38,9 @@ public class Shooter : MonoBehaviour
         Fire();
     }
 
+    public void StopFiring(){
+        isFiring =false;
+    }
     void Fire()
     {
         if(isFiring && firingCoroutine == null){
@@ -58,7 +61,7 @@ public class Shooter : MonoBehaviour
             if(rb!=null){
                 rb.linearVelocity = transform.up * projectileSpeed;
             }
-                        Destroy(projectile,projectileLifetime);
+            Destroy(projectile,projectileLifetime);
             if(useAI){
                 float timeToNextProjectile = Random.Range(baseFiringRate - enemyFireVariance,baseFiringRate+enemyFireVariance);
                 timeToNextProjectile = Mathf.Clamp(timeToNextProjectile, minFiringRate, float.MaxValue);

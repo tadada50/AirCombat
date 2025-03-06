@@ -22,11 +22,11 @@ public class UIScript : MonoBehaviour
     void ScoreChangeHandler(int score){
         // TextMeshProUGUI scoreText = GameObject.FindGameObjectWithTag("ScoreText").GetComponent<TextMeshProUGUI>();
         if(scoreText!=null)
-            scoreText.text = score.ToString();
+            scoreText.text = scoreKeeper.Score.ToString("00000000");
     
     }
     void HealthChangeHandler(int health){
-        Debug.Log("Health: " + health + " MaxHealth: "+ healthSlider.maxValue);
+        // Debug.Log("Health: " + health + " MaxHealth: "+ healthSlider.maxValue);
         if(healthSlider!=null){
             healthSlider.value = (float)health;
         }

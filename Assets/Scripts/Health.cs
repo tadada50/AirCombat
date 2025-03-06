@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class Health : MonoBehaviour
@@ -17,6 +18,8 @@ public class Health : MonoBehaviour
     bool isBlinking = false;
     AudioPlayer audioPlayer;
     ScoreKeeper scoreKeeper;
+
+    LevelManager levelManager;
     Player player;
 
 
@@ -43,6 +46,7 @@ public event OnHealthChangeDelegate OnHealthChange;
         initialHealth= CurrentHealth;
         scoreKeeper = FindFirstObjectByType<ScoreKeeper>();
         player = FindFirstObjectByType<Player>();
+        levelManager = FindFirstObjectByType<LevelManager>();
     }
     void Start()
     {
@@ -102,17 +106,33 @@ public event OnHealthChangeDelegate OnHealthChange;
     void Die(){
         if(!isPlayer){
             scoreKeeper.IncreaseScore(score);
+            
+        }else{
+            // gameObject.GetComponentInChildren<SpriteRenderer>().enabled = false;//if we destroy the object the IEnumerator gets destoryed too
+            // StartCoroutine(GameOver());
+            GameOver();
         }
         Destroy(gameObject);
     }
 
+    void GameOver(){
+        TurnOffAudio();
+        // player.GetComponent<Shooter>().StopFiring();
+        levelManager.LoadGameOver();
+    }
     void PlayHitEffect(){
         if(hitEffect != null){
             ParticleSystem instance = Instantiate(hitEffect,transform.position,Quaternion.identity,transform);
             Destroy(instance.gameObject, instance.main.duration + instance.main.startLifetime.constantMax);
         }
     }
-
+    void TurnOffAudio(){
+        AudioSource[] audioSources = FindObjectsByType<AudioSource>(FindObjectsSortMode.None);
+        foreach (AudioSource source in audioSources)
+        {
+            source.Stop();
+        }
+    }
         void BlinkSprite()
     {
         if (criticalHealth > (float)CurrentHealth/(float)initialHealth && !isBlinking)
